@@ -1,17 +1,36 @@
 var jukebox = document.querySelector("ul.player"); // grab the jukebox ul
 jukebox.addEventListener("click", function(e) { // add event handler for thr jukebox ul
     var songName = e.target.getAttribute("data-src"), // get the clicked target data src attribute
-        songPlaying = document.querySelector("#player"); // get the played song
+        audioPlayer = document.querySelector("#player"); // get the played song
 
-    if (songPlaying) { // check if the song is playing
-        if (songPlaying.paused) { // check if the song is paused
-            songPlaying.play(); // play it
-            e.target.id = "playing"; // add the proper id for it
-        } else { // if not paused
-            songPlaying.pause(); // pause it
-            e.target.id = "paused"; // add the prper id for it
+    if (audioPlayer) { // check if there is a song and it is playing
+
+        if (songName === audioPlayer.getAttribute("src")) { // check the two src are the same
+
+            if (audioPlayer.paused) { // check if the song is paused
+                audioPlayer.play(); // play it
+                e.target.id = "playing"; // add the proper id for it
+            } else { // if not paused
+                audioPlayer.pause(); // pause it
+                e.target.id = "paused"; // add the prper id for it
+            }
+
+        } else { // if not the same
+            audioPlayer.src = songName; // change the old song src with the newely targeted song
+            audioPlayer.play(); // play the song
+
+            if (document.querySelector("#playing")) { // check if there is a playing song while changing to another song
+                document.querySelector("#playing").id = ""; // reset the id
+            } else { // if there a paused song
+                document.querySelector("#paused").id = ""; // set the id
+            }
+            
+            e.target.id = "playing"; // set the id for the play playing song
         }
-    } else { // if not playing
+
+        
+
+    } else { // if there is a song create one
         var audioPlayer = document.createElement("audio"); // creating an media object
         audioPlayer.id = "player"; // set an id for the object
         e.target.id = "playing"; // adding the predefined id styling to the targeted song
